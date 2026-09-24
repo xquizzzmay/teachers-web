@@ -10,13 +10,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Golos+Text:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#faf7f0;--surface:#ffffff;--text:#141210;--muted:#6a6558;--line:#e2dccd;--gold:#9a7422;--gold-ink:#ffffff;
+  --bg:#f3f6fb;--surface:#ffffff;--text:#0d1b2e;--muted:#56657b;--line:#d5deeb;--gold:#1e4f91;--gold-ink:#ffffff;
   box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
 }
 @media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){--bg:#0a0a0a;--surface:#131210;--text:#f2eee4;--muted:#a39d8f;--line:#2a2721;--gold:#cfab55;--gold-ink:#16120a}
+  :root:not([data-theme="light"]){--bg:#08131f;--surface:#0e1e30;--text:#edf2f8;--muted:#98a9be;--line:#1e3148;--gold:#8db7ec;--gold-ink:#08131f}
 }
-:root[data-theme="dark"]{--bg:#0a0a0a;--surface:#131210;--text:#f2eee4;--muted:#a39d8f;--line:#2a2721;--gold:#cfab55;--gold-ink:#16120a}
+:root[data-theme="dark"]{--bg:#08131f;--surface:#0e1e30;--text:#edf2f8;--muted:#98a9be;--line:#1e3148;--gold:#8db7ec;--gold-ink:#08131f}
 html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
 *,*::before,*::after{box-sizing:inherit}
 body{margin:0;background:var(--bg);color:var(--text);font:400 17px/1.7 "Golos Text",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
@@ -78,6 +78,17 @@ footer{padding:30px 0 44px;color:var(--muted);font-size:14px;border-top:1px soli
 @media (max-width:780px){
   .hero,.case,.proj{grid-template-columns:1fr}.hero{gap:48px;padding:44px 0 56px}.skills{columns:1}nav{gap:18px}
 }
+.srch{width:100%;max-width:520px;padding:13px 16px;border:1px solid var(--line);background:var(--surface);color:var(--text);font:inherit;border-radius:0}
+.srch:focus{outline:none;border-color:var(--gold)}
+.cnt{color:var(--muted);margin:12px 0 0;font-size:15px}
+.yr{font-size:30px;color:var(--gold);margin:34px 0 4px;font-weight:600}
+.pub{padding:14px 0;border-bottom:1px solid var(--line)}
+.pub a{font-weight:500;text-decoration:none;text-underline-offset:4px;overflow-wrap:anywhere}
+.pub a:hover{color:var(--gold);text-decoration:underline}
+.pub p{margin:4px 0 0;color:var(--muted);font-size:15px}
+.pub .ct{color:var(--gold);margin-left:10px}
+button.btn{font:inherit;font-weight:500;letter-spacing:.03em;cursor:pointer;background:transparent}
+.lead a,footer a{color:var(--gold);text-underline-offset:4px}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -95,7 +106,7 @@ footer{padding:30px 0 44px;color:var(--muted);font-size:14px;border-top:1px soli
   <div class="hero">
     <div>
       <h1>Фаррух Мухаммадович<br>Мухтаров</h1>
-      <p class="lead">Преподаватель Central Asian Medical University (CAMU). Веду курсы по Java, HTML и Python. Специализация: информационная безопасность и кибербезопасность.</p>
+      <p class="lead">Преподаватель <a href="https://camuf.uz/ru" target="_blank" rel="noopener">Central Asian Medical University (CAMU)</a>. Веду курсы по Java, HTML и Python. Специализация: информационная безопасность и кибербезопасность.</p>
       <div class="btns">
         <a class="btn pri" href="https://t.me/fmmtatufb" target="_blank" rel="noopener">Написать в Telegram</a>
         <a class="btn" href="https://scholar.google.com/citations?user=M8tLuFYAAAAJ&hl=ru" target="_blank" rel="noopener">Научные работы</a>
@@ -125,8 +136,14 @@ footer{padding:30px 0 44px;color:var(--muted);font-size:14px;border-top:1px soli
 
   <section id="research">
     <h2>Научные работы</h2>
-    <p class="contact">Публикации и цитирования собраны в профиле Google Scholar.</p>
-    <div class="btns"><a class="btn pri" href="https://scholar.google.com/citations?user=M8tLuFYAAAAJ&hl=ru" target="_blank" rel="noopener">Открыть Google Scholar</a></div>
+    <p class="contact">Статьи и тезисы по информационной безопасности, кибербезопасности, цифровым технологиям в образовании и энергетике. Название ведёт на поиск статьи в Google Scholar.</p>
+    <input class="srch" id="q" type="search" placeholder="Поиск по названию, автору или журналу" aria-label="Поиск по публикациям">
+    <p class="cnt" id="cnt"></p>
+    <div id="pubs"></div>
+    <div class="btns" style="margin-top:28px">
+      <button class="btn" id="more">Показать все публикации</button>
+      <a class="btn pri" href="https://scholar.google.com/citations?user=M8tLuFYAAAAJ&hl=ru" target="_blank" rel="noopener">Профиль Google Scholar</a>
+    </div>
   </section>
 
   <section id="contact">
@@ -135,11 +152,12 @@ footer{padding:30px 0 44px;color:var(--muted);font-size:14px;border-top:1px soli
     <div class="btns">
       <a class="btn pri" href="https://t.me/fmmtatufb" target="_blank" rel="noopener">@fmmtatufb в Telegram</a>
       <a class="btn" href="tel:+998943294499">+998 94 329 44 99</a>
+      <a class="btn" href="https://camuf.uz/ru" target="_blank" rel="noopener">Сайт университета</a>
     </div>
   </section>
   </main>
 
-  <footer>© 2026 Фаррух Мухаммадович Мухтаров, Central Asian Medical University</footer>
+  <footer>© 2026 Фаррух Мухаммадович Мухтаров, <a href="https://camuf.uz/ru" target="_blank" rel="noopener">Central Asian Medical University</a></footer>
 </div>
 <script>
 document.querySelectorAll('.btn').forEach(function(b){
@@ -157,6 +175,73 @@ document.getElementById('tgl').addEventListener('click',function(){
   var t=dark?'light':'dark';root.dataset.theme=t;
   try{localStorage.setItem('theme',t);}catch(e){}
 });
+</script>
+<script>
+var P=[
+["Выбор приоритетных факторов концептуальной модели государственной информационной безопасности","ФМ Мухтаров","International journal of innovative technologies in social science",2018,21],
+["ДАВЛАТ БОШҚАРУВ ИДОРАЛАРИ АХБОРОТ РЕСУРСЛАРИ КОНФИДЕНЦИАЛЛИГИНИ ТАЪМИНЛАШНИНГ ҲУҚУҚИЙ АСОСЛАРИ","СБЎ Абдурахмонов, ТМЎ Охунов, ИАЎ Махсудов","Scientific progress",2021,0],
+["Информационная технология приоритетный фактор в формировании стратегии межгосударственных отношений","ФМ Мухтаров","Издательство Самарского научного центра",2018,21],
+["Многостадийные процессы формирования информационных ресурсов","ФМ Мухтаров","Издательство Самарского научного центра",2018,21],
+["МОДЕЛИ ОБЕСПЕЧЕНИЯ СИСТЕМЫ БЕЗОПАСНОСТИ ИНФОРМАЦИИ НА ЗАЩИЩАЕМЫХ ОБЪЕКТАХ","ФМ Мухтаров, ШМ Аскарова","Инновационные научные исследования",2018,1],
+["Обеспечение более безопасного цифрового будущего, важность образования в области кибербезопасности","Ф Мухтаров","Информатика и инженерные технологии",2023,3],
+["Обеспечение информационной безопасности государственных тайн в информационной среде","ФМ Мухтаров","ТошДТУ хабарлари",2018,21],
+["ОСОБЕННОСТИ СОЗДАНИЯ ВИРТУАЛЬНЫХ КОММУНИКАТИВНЫХ ИНФОРМАЦИОННЫХ ПРОСТРАНСТВ","ФМ Мухтаров, ШМ Аскарова","Инновационные научные исследования",2018,0],
+["ПРИМЕНЕНИЕ ПРАКТИЧЕСКИХ ЗАДАНИЙ И ПРОЕКТОВ В ОБУЧЕНИИ КИБЕРБЕЗОПАСНОСТИ: РАЗВИТИЕ ПРАКТИЧЕСКИХ НАВЫКОВ И ПРИМЕНЕНИЕ ЗНАНИЙ","Ф Мухтаров","Conference on Digital Innovation: Modern Problems and Solutions",2023,0],
+["Специализированный процессорной устройства для вычисления математических функций","М Турдиматов, Ф Мухтаров, Д Тохтасинов","Journal of technical research and development",2023,20],
+["ЦИФРОВАЯ ДИПЛОМАТИЯ-ПРИОРИТЕТНЫЙ ФАКТОР ФОРМИРОВАНИЯ МЕЖГОСУДАРСТВЕННЫХ ОТНОШЕНИЙ","МС Якубов, ФМ Мухтаров","Научные разработки: Евразийский регион",2017,2],
+["ЦИФРОВИЗАЦИЯ И ЦИФРОВЫЕ ТЕХНОЛОГИИ В ОБРАЗОВАНИИ","Ф Мухтаров","Development of pedagogical technologies in modern sciences",2023,0],
+["A conceptual model of information security in international relations","MF Muhammadovich","International Conference: Scientific research of the SCO countries: synergy",2018,22],
+["Analysis of automation through sensors through gas sensors in different directions","F Mukhtarov, N Jo'rayev, S Zokirov, M Sadikova, A Muhammadjonov и др.","E3S Web of Conferences",2024,56],
+["ANALYSIS OF CURRENT INFORMATION SECURITY POLICY","MF Mukhammadovich","Research Focus",2022,0],
+["Applying the science of cyber security to the educational process of higher education","F Mukhtarov","Евразийский журнал технологий и инноваций",2023,21],
+["Axborot tizimlarida xavfsizlik tahdidlarining tasnifi","F Muxtarov, A Umarov, A Ro’zaliyev","Engineering problems and innovations",2023,42],
+["AXBOROT XAVFSIZLIGIDA VEB-FILTRLASHNING VAZIFALARI VA MUAMMOLARI","F Muxtarov","Research and implementation",2023,0],
+["Changes of chemical reactions in soil during electric processing by means of UV-radiation","A Anarbaev, O Tursunov, D Kodirov, Z Sharipov, F Mukhtarov","E3S Web of Conferences",2021,1],
+["Development of a laboratory nozzle chamber installation for the humidification of buildings","K Isakhodjayev, F Mukhtarov, D Kodirov, I Toshpulatov","IOP Conference Series: Earth and Environmental Science",2021,7],
+["Development of a mathematical model of a recycling cooling system of a thermal power plant","K Norboyev, K Abbos, F Mukhtarov, N Usmonov","E3S Web of Conferences",2023,0],
+["Development of circuit solutions for a wind turbine on the basis of integrated membrane technologies for steam-gas thermal power plants","F Mukhtarov, S Yarashev, A Akhmedov, N Usmonov","E3S Web of Conferences",2023,2],
+["Efficiency of energy converters and appropriateness of their cascade connection","G Abdurakhmanov, RA Zakhidov, FK Mukhtarov","Advanced Research Workshop on Recent Trends",2012,0],
+["Estimating heat losses in solar high-temperature heat accumulators based on a nonstationary three-layer model","SI Klychev, RA Zakhidov, F Mukhtarov, Z Aminov, ZS Klychev, F Turgunov","Applied Solar Energy",2014,3],
+["IMPROVING THE METHODOLOGY OF TEACHING THE SCIENCE OF «CYBERSECURITY FUNDAMENTALS» IN THE CONDITIONS OF IDEOLOGICAL THREATS","F Mukhtarov","International Bulletin of Engineering and Technology",2023,0],
+["Korxonada axborot xavfsizligini ta’minlashning zamonaviy usullari","F Muxtarov, X Sadirova","Engineering problems and innovations",2023,0],
+["Mathematical approximator based on basic spline approximation","M Turdimatov, F Mukhtarov, N Ibrokhimov, S Umarov, J Mirzayev и др.","E3S Web of Conferences",2024,11],
+["Modeling and calculation of energy characteristics of the solar radiation linear concentrators","SI Klychev, RA Zakhidov, R Khuzhanov, ZS Klychev, F Mukhtarov и др.","Applied Solar Energy",2012,4],
+["PRINCIPLES OF NON-USE OF FORCE OR THREAT OF FORCE IN INTERNATIONAL RELATIONS","R Sadullaeva, F Mukhtarov","Интернаука",2021,0],
+["PRIORITY DIRECTIONS OF BUILDING E-GOVERNMENT IN THE REPUBLIC OF UZBEKISTAN","S Askarova, F Mukhtarov","Recent Scientific Investigation",2020,0],
+["Research of the semiconductor sensors based on anomal photovoltaic effect with highly sensitive parameters of the deformation","O Rayimdjanova, F Mukhtarov, M Ismoilov, H Abdusamatov и др.","E3S Web of Conferences",2024,11],
+["SAFEGUARDING CYBERSPACE, STRATEGIES FOR PREVENTING AND COMBATING CYBERCRIME","F Mukhtarov, B Sodiqov","Research and implementation",2024,0],
+["Scheme of conditioning in room based on evaporative air cooling system using solar energy","A Anarbaev, R Zakhidov, F Mukhtarov","IOP Conference Series: Materials Science and Engineering",2020,7],
+["Specialized processors and algorithms for computing standard functions","M Turdimatov, F Mukhtarov, S Abdurakhmonov, U Khudoynazarov и др.","E3S Web of Conferences",2023,8],
+["Study of the influence of cooling water quality and inhibitors on the corrosion rate of brass in cooling water","K Norboyev, F Mukhtarov, H Zokhid, N Usmonov","E3S Web of Conferences",2023,2],
+["Study on the cost effectiveness of a combined evaporation unit","F Mukhtarov, A Akhmedov, N Usmonov, J Usmonov","E3S Web of Conferences",2023,0],
+["TARMOQ TRAFIGI ANOMALIYALARINI IDENTIFIKATSIYA QILISHNING STATIK USULI","MF Muhammadovich","Al-Farg’oniy avlodlari",2023,0],
+["Tarmoq xavfsizligini url filtirlash bilan yaxshilash","F Muxtarov, A Tojidinov","Research and implementation",2023,0],
+["THE COMPLEX OF FACTORS IN IMPROVING THE SOFTWARE AND METHODOLOGICAL PROVISION OF «CYBER SECURITY» SCIENCE TEACHING IN THE PERIOD OF INFORMATION ATTACKS","F Muxtarov","Science and innovation",2024,0],
+["THE IMPACT OF INNOVATIVE TECHNOLOGIES ON STUDENT LEARNING AND ENGAGEMENT: A REVIEW OF THE LITERATURE","FM Mukhtarov","Innovatsion iqtisodiyotni shakllantirishda axborot kommunikatsiya",2023,0],
+["THE POWER OF CYBERSECURITY EDUCATION: DEFENDING AGAINST DIGITAL THREATS","FM Mukhtarov","Golden Brain",2023,0],
+["THE ROLE OF GAMIFICATION IN IT PEDAGOGY, ENGAGING STUDENTS AND PROMOTING ACTIVE LEARNING","F Mukhtarov","Theoretical aspects in the formation of pedagogical sciences",2023,0],
+["Thermal characteristics of tubular receivers of solar radiation line concentrators","SI Klychev, RA Zakhidov, R Khuzhanov, ZS Klychev, F Mukhtarov и др.","Applied Solar Energy",2013,5],
+["Umumiy o’rta ta’limga kiberxavfsizlik fanini tizimli isloh qilishning ustuvor yo ‘nalishlari","F Muxtarov, M Turdimatov, M Mominova","Engineering problems and innovations",2023,0],
+["WI-FI qurilmalarining tarmoq xavfsizligini taminlash usullari","F Muxtarov, A Tojidinov","Research and implementation",2023,0],
+["Xavf-xatarlarni keltirib chiqaruvchi omillar, xavf-xatarlarni aniqlash usullari, muammo va yechim","MF Muhammadovich","Al-Farg’oniy avlodlari",2023,1]
+];
+var q=document.getElementById('q'),box=document.getElementById('pubs'),more=document.getElementById('more'),cnt=document.getElementById('cnt'),all=false,LIM=8;
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function draw(){
+  var t=q.value.trim().toLowerCase();
+  var L=P.filter(function(p){return !t||(p[0]+' '+p[1]+' '+p[2]).toLowerCase().indexOf(t)>-1}).sort(function(a,b){return b[3]-a[3]});
+  var show=(all||t)?L:L.slice(0,LIM),y=0,h='';
+  show.forEach(function(p){
+    if(p[3]!==y){y=p[3];h+='<h3 class="yr">'+y+'</h3>'}
+    h+='<article class="pub"><a href="https://scholar.google.com/scholar?q='+encodeURIComponent(p[0])+'" target="_blank" rel="noopener">'+esc(p[0])+'</a><p>'+esc(p[1])+'</p><p>'+esc(p[2])+(p[4]?' <span class="ct">Цитирований: '+p[4]+'</span>':'')+'</p></article>';
+  });
+  box.innerHTML=h||'<p class="cnt">Ничего не найдено</p>';
+  cnt.textContent=t?('Найдено: '+L.length+' из '+P.length):('Всего публикаций: '+P.length);
+  more.style.display=(t||all||L.length<=LIM)?'none':'inline-block';
+}
+q.addEventListener('input',draw);
+more.addEventListener('click',function(){all=true;draw()});
+draw();
 </script>
 </body>
 </html>
